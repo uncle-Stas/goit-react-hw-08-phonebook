@@ -23,8 +23,7 @@ const ContactsList = ({ contacts, deleteContact, searchContact }) => {
         </ul>
       ) : (
         <Notification
-          text="is not in your phone book. Please add new contact."
-          italicText={searchContact}
+          text={`${searchContact} - is not in your phone book. Please add new contact.`}
         />
       )}
     </>
