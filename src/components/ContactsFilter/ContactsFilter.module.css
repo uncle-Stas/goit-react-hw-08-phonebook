@@ -1,0 +1,11 @@
+.title {
+  margin-bottom: 15px;
+}
+
+.filterLabel {
+  max-width: 260px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
