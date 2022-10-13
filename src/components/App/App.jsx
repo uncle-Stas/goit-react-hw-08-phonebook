@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useEffect, useState } from 'react';
 import { Notify } from 'notiflix';
 
 import ContactForm from 'components/ContactForm/ContactForm';
@@ -7,36 +7,22 @@ import ContactsFilter from 'components/ContactsFilter/ContactsFilter';
 import Section from 'components/Section/Section';
 import Notification from 'components/Notification/Notification';
 
-class App extends Component {
-  state = {
-    contacts: [
-      // { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      // { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      // { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      // { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
-    filter: '',
-  };
+function App() {
+  const [contacts, setContacts] = useState(
+    JSON.parse(localStorage.getItem('contacts')) ?? []
+  );
+  const [filter, setFilter] = useState('');
 
-  componentDidMount() {
-    const contacts = localStorage.getItem('contacts');
-    const parsedContacts = JSON.parse(contacts);
+  useEffect(
+    prev => {
+      if (prev !== contacts) {
+        localStorage.setItem('contacts', JSON.stringify(contacts));
+      }
+    },
+    [contacts]
+  );
 
-    if (parsedContacts) {
-      this.setState({ contacts: parsedContacts });
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    console.log('componentDidUpdate');
-    if (prevState.contacts !== this.state.contacts) {
-      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-    }
-  }
-
-  addContact = newContact => {
-    const { contacts } = this.state;
-
+  const addContact = newContact => {
     let nameRepeat = 0;
 
     for (const contact of contacts) {
@@ -51,23 +37,20 @@ class App extends Component {
           position: 'center-top',
           timeout: 5000,
         })
-      : this.setState(prevState => {
-          return {
-            contacts: [...prevState.contacts, newContact],
-          };
-        });
+      : setContacts(prev => [...prev, newContact]);
   };
 
-  handleChangeFilter = event => {
+  const handleChangeFilter = event => {
     const { value } = event.target;
-    this.setState({
-      filter: value,
-    });
+
+    setFilter(value);
   };
 
-  filterContacts() {
-    const { contacts, filter } = this.state;
+  const deleteContact = id => {
+    setContacts(contacts.filter(contact => contact.id !== id));
+  };
 
+  const filterContacts = () => {
     if (!filter) {
       return contacts;
     }
@@ -77,47 +60,32 @@ class App extends Component {
     );
 
     return filteredContacts;
-  }
-
-  deleteContact = id => {
-    this.setState(prevState => {
-      const newContacts = prevState.contacts.filter(
-        contact => contact.id !== id
-      );
-
-      return {
-        contacts: newContacts,
-      };
-    });
   };
 
-  render() {
-    const { contacts, filter } = this.state;
-    const checkContacts = contacts.length;
-    const filteredContacts = this.filterContacts();
+  const checkContacts = contacts.length;
+  const filteredContacts = filterContacts();
 
-    return (
-      <>
-        <Section>
-          <ContactForm onSubmit={this.addContact} />
-        </Section>
-        <Section>
-          <>
-            <ContactsFilter onChangeFilter={this.handleChangeFilter} />
-            {checkContacts ? (
-              <ContactsList
-                contacts={filteredContacts}
-                deleteContact={this.deleteContact}
-                searchContact={filter}
-              />
-            ) : (
-              <Notification text="You don't have contacts in the phone book. Please add new contacts." />
-            )}
-          </>
-        </Section>
-      </>
-    );
-  }
+  return (
+    <>
+      <Section>
+        <ContactForm onSubmit={addContact} />
+      </Section>
+      <Section>
+        <>
+          <ContactsFilter onChangeFilter={handleChangeFilter} />
+          {checkContacts ? (
+            <ContactsList
+              contacts={filteredContacts}
+              deleteContact={deleteContact}
+              searchContact={filter}
+            />
+          ) : (
+            <Notification text="You don't have contacts in the phone book. Please add new contacts." />
+          )}
+        </>
+      </Section>
+    </>
+  );
 }
 
 export default App;
