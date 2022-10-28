@@ -1,7 +1,18 @@
 import css from './ContactsFilter.module.css';
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFilter } from 'Redux/filterSlice';
 
-const ContactsFilter = ({ onChangeFilter, filter }) => {
+const ContactsFilter = () => {
+  const dispatch = useDispatch();
+
+  const onChangeFilter = event => {
+    const { value } = event.target;
+
+    dispatch(setFilter(value));
+  };
+
+  const filter = useSelector(state => state.filter);
+
   return (
     <>
       <h2 className={css.title}>Contacts</h2>
@@ -19,10 +30,3 @@ const ContactsFilter = ({ onChangeFilter, filter }) => {
 };
 
 export default ContactsFilter;
-
-// --------------------------- PropTypes ----------------------
-
-ContactsFilter.propTypes = {
-  onChangeFilter: PropTypes.func.isRequired,
-  filter: PropTypes.string.isRequired,
-};

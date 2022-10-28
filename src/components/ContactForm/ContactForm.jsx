@@ -1,6 +1,9 @@
 import css from './ContactForm.module.css';
-import PropTypes from 'prop-types';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from 'Redux/contactsSlice';
+
+import { Notify } from 'notiflix';
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
 
@@ -9,13 +12,29 @@ const initialState = {
   number: '',
 };
 
-function ContactForm({ onSubmit }) {
+function ContactForm() {
   const [state, setState] = useState(initialState);
+
+  const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contacts);
 
   const handleChange = event => {
     const { name, value } = event.target;
 
     setState(prev => ({ ...prev, [name]: value }));
+  };
+
+  const checkRepeatName = name => {
+    let nameRepeat = 0;
+
+    for (const contact of contacts) {
+      if (contact.name.toLowerCase() === name.toLowerCase()) {
+        nameRepeat = 1;
+        break;
+      }
+    }
+
+    return nameRepeat;
   };
 
   const handleSubmit = event => {
@@ -24,7 +43,13 @@ function ContactForm({ onSubmit }) {
     const { name, number } = state;
     const id = nanoid();
 
-    onSubmit({ name, number, id });
+    !checkRepeatName(name)
+      ? dispatch(addContact({ id, name, number }))
+      : Notify.failure(`${name}, is alredy in contacts`, {
+          position: 'center-top',
+          timeout: 5000,
+        });
+
     setState(initialState);
 
     event.target.reset();
@@ -70,9 +95,3 @@ function ContactForm({ onSubmit }) {
 }
 
 export default ContactForm;
-
-// --------------------------- PropTypes ----------------------
-
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-};
