@@ -72,7 +72,7 @@ function App() {
       </Section>
       <Section>
         <>
-          <ContactsFilter onChangeFilter={handleChangeFilter} />
+          <ContactsFilter onChangeFilter={handleChangeFilter} filter={filter} />
           {checkContacts ? (
             <ContactsList
               contacts={filteredContacts}
