@@ -1,19 +1,19 @@
 import css from './ContactForm.module.css';
 
+import { nanoid } from 'nanoid';
+import { Notify } from 'notiflix';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from 'Redux/contactsSlice';
-
-import { Notify } from 'notiflix';
-import { nanoid } from 'nanoid';
 import { useState } from 'react';
 
-const initialState = {
+const initialLocalState = {
   name: '',
   number: '',
 };
 
 function ContactForm() {
-  const [state, setState] = useState(initialState);
+  const [localState, setLocalState] = useState(initialLocalState);
 
   const dispatch = useDispatch();
   const contacts = useSelector(state => state.contacts);
@@ -21,15 +21,15 @@ function ContactForm() {
   const handleChange = event => {
     const { name, value } = event.target;
 
-    setState(prev => ({ ...prev, [name]: value }));
+    setLocalState(prev => ({ ...prev, [name]: value }));
   };
 
   const checkRepeatName = name => {
-    let nameRepeat = 0;
+    let nameRepeat = 1;
 
     for (const contact of contacts) {
       if (contact.name.toLowerCase() === name.toLowerCase()) {
-        nameRepeat = 1;
+        nameRepeat = 0;
         break;
       }
     }
@@ -40,17 +40,17 @@ function ContactForm() {
   const handleSubmit = event => {
     event.preventDefault();
 
-    const { name, number } = state;
+    const { name, number } = localState;
     const id = nanoid();
 
-    !checkRepeatName(name)
+    checkRepeatName(name)
       ? dispatch(addContact({ id, name, number }))
       : Notify.failure(`${name}, is alredy in contacts`, {
           position: 'center-top',
           timeout: 5000,
         });
 
-    setState(initialState);
+    setLocalState(initialLocalState);
 
     event.target.reset();
   };
