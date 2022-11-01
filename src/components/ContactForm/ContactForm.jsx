@@ -44,15 +44,16 @@ function ContactForm() {
     const id = nanoid();
 
     checkRepeatName(name)
-      ? dispatch(addContact({ id, name, number }))
+      ? dispatch(addContact({ id, name, number })) &&
+        setLocalState(initialLocalState) &&
+        event.target.reset()
       : Notify.failure(`${name}, is alredy in contacts`, {
           position: 'center-top',
           timeout: 5000,
         });
 
-    setLocalState(initialLocalState);
-
-    event.target.reset();
+    // setLocalState(initialLocalState);
+    // event.target.reset();
   };
 
   return (
@@ -71,6 +72,7 @@ function ContactForm() {
             placeholder="Enter name"
             autoComplete="off"
             minLength={3}
+            value={localState.name}
           />
         </label>
         <label className={css.inputLabel}>
@@ -84,6 +86,7 @@ function ContactForm() {
             onChange={handleChange}
             placeholder="Enter phone number"
             autoComplete="off"
+            value={localState.number}
           />
         </label>
         <button type="submit" className={css.button}>
