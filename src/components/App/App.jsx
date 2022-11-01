@@ -7,7 +7,7 @@ import Notification from 'components/Notification/Notification';
 import { useSelector } from 'react-redux';
 
 function App() {
-  const contacts = useSelector(state => state.contacts);
+  const contacts = useSelector(state => state.contacts.contacts);
 
   const checkContacts = contacts.length;
 

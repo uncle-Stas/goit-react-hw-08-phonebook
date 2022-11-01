@@ -16,7 +16,7 @@ function ContactForm() {
   const [localState, setLocalState] = useState(initialLocalState);
 
   const dispatch = useDispatch();
-  const contacts = useSelector(state => state.contacts);
+  const contacts = useSelector(state => state.contacts.contacts);
 
   const handleChange = event => {
     const { name, value } = event.target;
