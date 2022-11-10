@@ -2,7 +2,7 @@
   "name": "goit-react-hw-03-phonebook",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://uncle-Stas.github.io/goit-react-hw-06-phonebook",
+  "homepage": "https://uncle-Stas.github.io/goit-react-hw-07-phonebook",
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.6",
     "@testing-library/jest-dom": "^5.16.5",
@@ -16,7 +16,6 @@
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.4",
     "react-scripts": "5.0.1",
-    "redux-persist": "^6.0.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

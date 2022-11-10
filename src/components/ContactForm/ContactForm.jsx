@@ -6,6 +6,7 @@ import { Notify } from 'notiflix';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from 'Redux/contactsSlice';
 import { useState } from 'react';
+import { selectContacts } from 'Redux/selectors';
 
 const initialLocalState = {
   name: '',
@@ -16,7 +17,7 @@ function ContactForm() {
   const [localState, setLocalState] = useState(initialLocalState);
 
   const dispatch = useDispatch();
-  const contacts = useSelector(state => state.contacts.contacts);
+  const contacts = useSelector(selectContacts);
 
   const handleChange = event => {
     const { name, value } = event.target;
@@ -51,9 +52,6 @@ function ContactForm() {
           position: 'center-top',
           timeout: 5000,
         });
-
-    // setLocalState(initialLocalState);
-    // event.target.reset();
   };
 
   return (

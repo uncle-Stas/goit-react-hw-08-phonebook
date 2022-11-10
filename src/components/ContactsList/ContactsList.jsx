@@ -4,10 +4,11 @@ import Notification from 'components/Notification/Notification';
 import ContactItem from './ContactItem';
 
 import { useSelector } from 'react-redux';
+import { selectContacts, selectFilter } from 'Redux/selectors';
 
 const ContactsList = () => {
-  const contacts = useSelector(state => state.contacts.contacts);
-  const filter = useSelector(state => state.filter);
+  const contacts = useSelector(selectContacts);
+  const filter = useSelector(selectFilter);
 
   const filterContacts = () => {
     if (!filter) {

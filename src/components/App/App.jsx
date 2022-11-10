@@ -5,9 +5,10 @@ import Section from 'components/Section/Section';
 import Notification from 'components/Notification/Notification';
 
 import { useSelector } from 'react-redux';
+import { selectContacts } from 'Redux/selectors';
 
 function App() {
-  const contacts = useSelector(state => state.contacts.contacts);
+  const contacts = useSelector(selectContacts);
 
   const checkContacts = contacts.length;
 
