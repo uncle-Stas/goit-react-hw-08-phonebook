@@ -1,16 +1,14 @@
 import css from './ContactForm.module.css';
 
-import { nanoid } from 'nanoid';
 import { Notify } from 'notiflix';
-
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'Redux/contactsSlice';
 import { useState } from 'react';
 import { selectContacts } from 'Redux/selectors';
+import { addContact } from 'Redux/contactsOperations';
 
 const initialLocalState = {
   name: '',
-  number: '',
+  phone: '',
 };
 
 function ContactForm() {
@@ -41,11 +39,10 @@ function ContactForm() {
   const handleSubmit = event => {
     event.preventDefault();
 
-    const { name, number } = localState;
-    const id = nanoid();
+    const { name, phone } = localState;
 
     checkRepeatName(name)
-      ? dispatch(addContact({ id, name, number })) &&
+      ? dispatch(addContact({ name, phone })) &&
         setLocalState(initialLocalState) &&
         event.target.reset()
       : Notify.failure(`${name}, is alredy in contacts`, {
@@ -77,14 +74,14 @@ function ContactForm() {
           Number
           <input
             type="tel"
-            name="number"
+            name="phone"
             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             required
             onChange={handleChange}
             placeholder="Enter phone number"
             autoComplete="off"
-            value={localState.number}
+            value={localState.phone}
           />
         </label>
         <button type="submit" className={css.button}>
