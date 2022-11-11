@@ -7,38 +7,26 @@ import Notification from 'components/Notification/Notification';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { selectContacts, selectIsLoading } from 'Redux/selectors';
-import { useEffect } from 'react';
-import { fetchContacts } from 'Redux/contactsOperations';
+import { useGetContactsQuery } from 'services/ApiSlice';
 
 function App() {
-  const contacts = useSelector(selectContacts);
-  const isLoading = useSelector(selectIsLoading);
-
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchContacts());
-  }, [dispatch]);
+  const { data: contacts, error, isLoading } = useGetContactsQuery();
 
   return (
     <>
       <Section>
-        <ContactForm />
+        <ContactForm contacts={contacts} />
       </Section>
       <Section>
         <>
-          <ContactsFilter />
+          <ContactsFilter contacts={contacts} />
           {isLoading && (
             <SkeletonTheme highlightColor="#000000">
               <Skeleton />
             </SkeletonTheme>
           )}
-          {contacts.length ? (
-            <ContactsList />
-          ) : (
-            <Notification text="You don't have contacts in the phone book. Please add new contacts." />
-          )}
+          {error && <Notification text={error.data} />}
+          {!error && <ContactsList contacts={contacts} />}
         </>
       </Section>
     </>

@@ -1,22 +1,41 @@
 import css from './ContactItem.module.css';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
-import { deleteContact } from 'Redux/contactsOperations';
 
-const ContactItem = ({ id, name, number }) => {
-  const dispatch = useDispatch();
+import { Notify } from 'notiflix';
+import { ThreeDots } from 'react-loader-spinner';
+import { useDeleteContactMutation } from 'services/ApiSlice';
+
+const ContactItem = ({ id, name, phone }) => {
+  const [deleteContact, { isLoading }] = useDeleteContactMutation();
+
+  const handleClick = () => {
+    deleteContact(id);
+    Notify.info(`${name} - was removed`);
+  };
 
   return (
     <li className={css.contactItem}>
       <span className={css.itemText}>
-        {name}: {number}
+        {name}: {phone}
       </span>
       <button
         type="button"
-        onClick={() => dispatch(deleteContact(id))}
+        onClick={handleClick}
         className={css.button}
+        disabled={isLoading}
       >
-        delete
+        {isLoading ? (
+          <ThreeDots
+            height="15"
+            width="36.5"
+            radius="6"
+            color="#ffffff"
+            ariaLabel="three-dots-loading"
+            visible={true}
+          />
+        ) : (
+          'delete'
+        )}
       </button>
     </li>
   );
@@ -29,5 +48,5 @@ export default ContactItem;
 ContactItem.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  number: PropTypes.string.isRequired,
+  phone: PropTypes.string.isRequired,
 };

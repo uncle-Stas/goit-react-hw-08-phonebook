@@ -1,21 +1,24 @@
 import css from './ContactForm.module.css';
 
+import PropTypes from 'prop-types';
+
 import { Notify } from 'notiflix';
-import { useDispatch, useSelector } from 'react-redux';
+import { ThreeDots } from 'react-loader-spinner';
 import { useState } from 'react';
-import { selectContacts } from 'Redux/selectors';
-import { addContact } from 'Redux/contactsOperations';
+import { useAddContactMutation } from 'services/ApiSlice';
+
+Notify.init({
+  position: 'center-top',
+});
 
 const initialLocalState = {
   name: '',
   phone: '',
 };
 
-function ContactForm() {
+function ContactForm({ contacts }) {
   const [localState, setLocalState] = useState(initialLocalState);
-
-  const dispatch = useDispatch();
-  const contacts = useSelector(selectContacts);
+  const [addContact, { isLoading }] = useAddContactMutation();
 
   const handleChange = event => {
     const { name, value } = event.target;
@@ -23,12 +26,12 @@ function ContactForm() {
     setLocalState(prev => ({ ...prev, [name]: value }));
   };
 
-  const checkRepeatName = name => {
-    let nameRepeat = 1;
+  const repeatName = nameQ => {
+    let nameRepeat = 0;
 
     for (const contact of contacts) {
-      if (contact.name.toLowerCase() === name.toLowerCase()) {
-        nameRepeat = 0;
+      if (contact.name.toLowerCase() === nameQ.toLowerCase()) {
+        nameRepeat = 1;
         break;
       }
     }
@@ -41,14 +44,14 @@ function ContactForm() {
 
     const { name, phone } = localState;
 
-    checkRepeatName(name)
-      ? dispatch(addContact({ name, phone })) &&
-        setLocalState(initialLocalState) &&
-        event.target.reset()
-      : Notify.failure(`${name}, is alredy in contacts`, {
-          position: 'center-top',
-          timeout: 5000,
-        });
+    if (repeatName(name)) {
+      return Notify.failure(`${name}, is alredy in contacts`);
+    }
+
+    addContact({ name, phone });
+    Notify.success(`${name}, added to phonebook`);
+    setLocalState(initialLocalState);
+    event.target.reset();
   };
 
   return (
@@ -84,8 +87,19 @@ function ContactForm() {
             value={localState.phone}
           />
         </label>
-        <button type="submit" className={css.button}>
-          Add contact
+        <button type="submit" className={css.button} disabled={isLoading}>
+          {isLoading ? (
+            <ThreeDots
+              height="15"
+              width="69"
+              radius="6"
+              color="#ffffff"
+              ariaLabel="three-dots-loading"
+              visible={true}
+            />
+          ) : (
+            'add contact'
+          )}
         </button>
       </form>
     </>
@@ -93,3 +107,9 @@ function ContactForm() {
 }
 
 export default ContactForm;
+
+// --------------------------- PropTypes ----------------------
+
+ContactForm.propTypes = {
+  contacts: PropTypes.array,
+};
