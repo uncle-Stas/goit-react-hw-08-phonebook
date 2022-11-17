@@ -1,10 +1,10 @@
 import css from './ContactForm.module.css';
 
 import { Notify } from 'notiflix';
-import { ThreeDots } from 'react-loader-spinner';
 import { useState } from 'react';
 import { useAddContactMutation, useGetContactsQuery } from 'services/ApiSlice';
 import { useEffect } from 'react';
+import Button from 'components/Button/Button';
 
 Notify.init({
   position: 'center-top',
@@ -100,20 +100,7 @@ function ContactForm() {
             value={localState.phone}
           />
         </label>
-        <button type="submit" className={css.button} disabled={isLoading}>
-          {isLoading ? (
-            <ThreeDots
-              height="15"
-              width="69"
-              radius="6"
-              color="#ffffff"
-              ariaLabel="three-dots-loading"
-              visible={true}
-            />
-          ) : (
-            'add contact'
-          )}
-        </button>
+        <Button type="submit" text="add contact" isLoading={isLoading} />
       </form>
     </>
   );
