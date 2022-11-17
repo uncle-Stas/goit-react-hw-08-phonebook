@@ -1,11 +1,10 @@
 import css from './ContactForm.module.css';
 
-import PropTypes from 'prop-types';
-
 import { Notify } from 'notiflix';
 import { ThreeDots } from 'react-loader-spinner';
 import { useState } from 'react';
-import { useAddContactMutation } from 'services/ApiSlice';
+import { useAddContactMutation, useGetContactsQuery } from 'services/ApiSlice';
+import { useEffect } from 'react';
 
 Notify.init({
   position: 'center-top',
@@ -16,9 +15,11 @@ const initialLocalState = {
   phone: '',
 };
 
-function ContactForm({ contacts }) {
+function ContactForm() {
   const [localState, setLocalState] = useState(initialLocalState);
-  const [addContact, { isLoading }] = useAddContactMutation();
+  const { data: contacts } = useGetContactsQuery();
+  const [addContact, { isLoading, isSuccess, isError }] =
+    useAddContactMutation();
 
   const handleChange = event => {
     const { name, value } = event.target;
@@ -49,10 +50,22 @@ function ContactForm({ contacts }) {
     }
 
     addContact({ name, phone });
-    Notify.success(`${name}, added to phonebook`);
-    setLocalState(initialLocalState);
     event.target.reset();
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      // Notify.success(`${localState.name}, added to phonebook`);
+      Notify.success(`------ QWEQWEQWEQWEQEEWE -------, added to phonebook`);
+      setLocalState(initialLocalState);
+    }
+  }, [isSuccess]);
+
+  useEffect(() => {
+    if (isError) {
+      Notify.failure('Oops, something went wrong...');
+    }
+  }, [isError]);
 
   return (
     <>
@@ -107,9 +120,3 @@ function ContactForm({ contacts }) {
 }
 
 export default ContactForm;
-
-// --------------------------- PropTypes ----------------------
-
-ContactForm.propTypes = {
-  contacts: PropTypes.array,
-};

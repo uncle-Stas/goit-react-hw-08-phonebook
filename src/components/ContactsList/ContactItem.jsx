@@ -4,14 +4,27 @@ import PropTypes from 'prop-types';
 import { Notify } from 'notiflix';
 import { ThreeDots } from 'react-loader-spinner';
 import { useDeleteContactMutation } from 'services/ApiSlice';
+import { useEffect } from 'react';
 
 const ContactItem = ({ id, name, phone }) => {
-  const [deleteContact, { isLoading }] = useDeleteContactMutation();
+  const [deleteContact, { isLoading, isSuccess, isError }] =
+    useDeleteContactMutation();
 
   const handleClick = () => {
     deleteContact(id);
-    Notify.info(`${name} - was removed`);
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      Notify.info(`${name} - was removed`);
+    }
+  }, [name, isSuccess]);
+
+  useEffect(() => {
+    if (isError) {
+      Notify.failure('Oops, something went wrong...');
+    }
+  }, [isError]);
 
   return (
     <li className={css.contactItem}>

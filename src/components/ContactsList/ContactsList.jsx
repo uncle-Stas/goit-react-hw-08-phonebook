@@ -1,13 +1,17 @@
 import css from './ContactsList.module.css';
 
-import PropTypes from 'prop-types';
 import Notification from 'components/Notification/Notification';
 import ContactItem from './ContactItem';
 
 import { useSelector } from 'react-redux';
-import { selectFilter } from 'Redux/selectors';
+import { selectFilter } from 'Redux/phonebook/selectors';
+import { useGetContactsQuery } from 'services/ApiSlice';
 
-const ContactsList = ({ contacts }) => {
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+
+const ContactsList = () => {
+  const { data: contacts, error, isLoading, isSuccess } = useGetContactsQuery();
   const filter = useSelector(selectFilter);
 
   const filterContacts = () => {
@@ -37,18 +41,22 @@ const ContactsList = ({ contacts }) => {
   }
 
   return (
-    <ul className={css.contactsList}>
-      {filteredContacts.map(contact => (
-        <ContactItem key={contact.id} {...contact} />
-      ))}
-    </ul>
+    <>
+      {isLoading && (
+        <SkeletonTheme highlightColor="#000000">
+          <Skeleton />
+        </SkeletonTheme>
+      )}
+      {error && <Notification text={error.data} />}
+      {isSuccess && (
+        <ul className={css.contactsList}>
+          {filteredContacts.map(contact => (
+            <ContactItem key={contact.id} {...contact} />
+          ))}
+        </ul>
+      )}
+    </>
   );
 };
 
 export default ContactsList;
-
-// --------------------------- PropTypes ----------------------
-
-ContactItem.propTypes = {
-  contacts: PropTypes.array,
-};
