@@ -2,7 +2,7 @@ import css from './ContactItem.module.css';
 import PropTypes from 'prop-types';
 
 import { Notify } from 'notiflix';
-import { useDeleteContactMutation } from 'services/ApiSlice';
+import { useDeleteContactMutation } from 'services/ApiContactsSlice';
 import { useEffect } from 'react';
 import Button from 'components/Button/Button';
 

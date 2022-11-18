@@ -2,7 +2,10 @@ import css from './ContactForm.module.css';
 
 import { Notify } from 'notiflix';
 import { useState } from 'react';
-import { useAddContactMutation, useGetContactsQuery } from 'services/ApiSlice';
+import {
+  useAddContactMutation,
+  useGetContactsQuery,
+} from 'services/ApiContactsSlice';
 import { useEffect } from 'react';
 import Button from 'components/Button/Button';
 
@@ -68,41 +71,38 @@ function ContactForm() {
   }, [isError]);
 
   return (
-    <>
-      <h1 className={css.title}>Phonebook</h1>
-      <form onSubmit={handleSubmit} className={css.form}>
-        <label className={css.inputLabel}>
-          Name
-          <input
-            type="text"
-            name="name"
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-            required
-            onChange={handleChange}
-            placeholder="Enter name"
-            autoComplete="off"
-            minLength={3}
-            value={localState.name}
-          />
-        </label>
-        <label className={css.inputLabel}>
-          Number
-          <input
-            type="tel"
-            name="phone"
-            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-            required
-            onChange={handleChange}
-            placeholder="Enter phone number"
-            autoComplete="off"
-            value={localState.phone}
-          />
-        </label>
-        <Button type="submit" text="add contact" isLoading={isLoading} />
-      </form>
-    </>
+    <form onSubmit={handleSubmit} className={css.form}>
+      <label className={css.inputLabel}>
+        Name
+        <input
+          type="text"
+          name="name"
+          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+          required
+          onChange={handleChange}
+          placeholder="Enter name"
+          autoComplete="off"
+          minLength={3}
+          value={localState.name}
+        />
+      </label>
+      <label className={css.inputLabel}>
+        Number
+        <input
+          type="tel"
+          name="phone"
+          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+          required
+          onChange={handleChange}
+          placeholder="Enter phone number"
+          autoComplete="off"
+          value={localState.phone}
+        />
+      </label>
+      <Button type="submit" text="add contact" isLoading={isLoading} />
+    </form>
   );
 }
 

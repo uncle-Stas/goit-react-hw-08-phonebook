@@ -5,7 +5,7 @@ import ContactItem from './ContactItem';
 
 import { useSelector } from 'react-redux';
 import { selectFilter } from 'Redux/phonebook/selectors';
-import { useGetContactsQuery } from 'services/ApiSlice';
+import { useGetContactsQuery } from 'services/ApiContactsSlice';
 
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
