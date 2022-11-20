@@ -1,4 +1,6 @@
 import css from './Button.module.css';
+import PropTypes from 'prop-types';
+
 import { ThreeDots } from 'react-loader-spinner';
 
 const Button = ({ type, onClick, isLoading, text }) => {
@@ -26,3 +28,12 @@ const Button = ({ type, onClick, isLoading, text }) => {
 };
 
 export default Button;
+
+// --------------------------- PropTypes ----------------------
+
+Button.propTypes = {
+  type: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
+  isLoading: PropTypes.bool,
+  onClick: PropTypes.func,
+};

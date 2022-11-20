@@ -6,7 +6,7 @@ import { useDeleteContactMutation } from 'services/ApiContactsSlice';
 import { useEffect } from 'react';
 import Button from 'components/Button/Button';
 
-const ContactItem = ({ id, name, phone }) => {
+const ContactItem = ({ id, name, number }) => {
   const [deleteContact, { isLoading, isSuccess, isError }] =
     useDeleteContactMutation();
 
@@ -29,7 +29,7 @@ const ContactItem = ({ id, name, phone }) => {
   return (
     <li className={css.contactItem}>
       <span className={css.itemText}>
-        {name}: {phone}
+        {name}: {number}
       </span>
       <Button
         type="button"
@@ -48,5 +48,5 @@ export default ContactItem;
 ContactItem.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  phone: PropTypes.string.isRequired,
+  number: PropTypes.string.isRequired,
 };

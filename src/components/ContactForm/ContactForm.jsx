@@ -15,10 +15,10 @@ Notify.init({
 
 const initialLocalState = {
   name: '',
-  phone: '',
+  number: '',
 };
 
-function ContactForm() {
+const ContactForm = () => {
   const [localState, setLocalState] = useState(initialLocalState);
   const { data: contacts } = useGetContactsQuery();
   const [addContact, { isLoading, isSuccess, isError }] =
@@ -46,20 +46,19 @@ function ContactForm() {
   const handleSubmit = event => {
     event.preventDefault();
 
-    const { name, phone } = localState;
+    const { name, number } = localState;
 
     if (repeatName(name)) {
       return Notify.failure(`${name}, is alredy in contacts`);
     }
 
-    addContact({ name, phone });
+    addContact({ name, number });
     event.target.reset();
   };
 
   useEffect(() => {
     if (isSuccess) {
-      // Notify.success(`${localState.name}, added to phonebook`);
-      Notify.success(`------ QWEQWEQWEQWEQEEWE -------, added to phonebook`);
+      Notify.success(`${localState.name}, added to phonebook`);
       setLocalState(initialLocalState);
     }
   }, [isSuccess]);
@@ -91,7 +90,7 @@ function ContactForm() {
         Number
         <input
           type="tel"
-          name="phone"
+          name="number"
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
@@ -104,6 +103,6 @@ function ContactForm() {
       <Button type="submit" text="add contact" isLoading={isLoading} />
     </form>
   );
-}
+};
 
 export default ContactForm;

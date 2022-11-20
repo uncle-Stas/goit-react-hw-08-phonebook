@@ -1,9 +1,13 @@
 import css from './Header.module.css';
 
-import { Link } from 'react-router-dom';
+import NavbarUser from 'components/NavbarUser/NavbarUser';
+
 import { MdContactPhone } from 'react-icons/md';
+import useAuthIsLogin from 'shared/hooks/useAuthIsLogin';
 
 const Header = () => {
+  const isUserLogin = useAuthIsLogin();
+
   return (
     <header className={css.header}>
       <div className={css.container}>
@@ -11,17 +15,7 @@ const Header = () => {
           Phonebook
           <MdContactPhone style={{ marginLeft: '10px' }} />
         </h1>
-        <nav>
-          <Link className={css.link} to="/">
-            signUp
-          </Link>
-          <Link className={css.link} to="/signin">
-            signIn
-          </Link>
-          <Link className={css.link} to="/phonebook">
-            phonebook
-          </Link>
-        </nav>
+        {isUserLogin && <NavbarUser />}
       </div>
     </header>
   );

@@ -1,8 +1,11 @@
-// import css from './FormRegistration.module.css';
+import css from '../FormLogin/FormLogin.module.css';
+
 import Button from 'components/Button/Button';
+import useAuthIsLoading from 'shared/hooks/useAuthIsLoading';
+
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { AuthOperation } from 'Redux/auth';
+import { authOperation } from 'Redux/auth';
 
 const initState = {
   name: '',
@@ -12,7 +15,7 @@ const initState = {
 
 const FormRegistration = () => {
   const [formData, setFormData] = useState(() => initState);
-  console.log('formData: ', formData);
+  const isUserLoading = useAuthIsLoading();
   const dispatch = useDispatch();
 
   const handleChange = event => {
@@ -24,12 +27,12 @@ const FormRegistration = () => {
   const handleSubmit = event => {
     event.preventDefault();
     const { name, email, password } = formData;
-    dispatch(AuthOperation.signup({ name, email, password }));
+    dispatch(authOperation.signup({ name, email, password }));
     setFormData(initState);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className={css.form}>
       <label>
         Name:
         <input
@@ -71,11 +74,9 @@ const FormRegistration = () => {
           minLength={7}
         />
       </label>
-      <Button type="submit" text="Register" />
+      <Button type="submit" text="Register" isLoading={isUserLoading} />
     </form>
   );
 };
 
 export default FormRegistration;
-//
-//

@@ -1,4 +1,5 @@
 .button {
+  box-sizing: content-box;
   padding: 2px 8px;
   border-radius: 10px;
   border-width: 1px;
