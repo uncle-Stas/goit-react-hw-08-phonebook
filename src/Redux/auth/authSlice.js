@@ -73,6 +73,7 @@ const authSlice = createSlice({
     [current.rejected]: (store, action) => {
       store.isLoading = false;
       store.error = action.payload;
+      store.isCurrentUserLoading = false;
     },
   },
 });
